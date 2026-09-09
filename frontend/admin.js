@@ -1,9 +1,11 @@
 const app = document.getElementById('app');
 const adminPassword = localStorage.getItem('bellecure-admin-key') || '';
 const adminEmail = localStorage.getItem('bellecure-admin-email') || '';
-const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:3000'
-  : window.location.origin;
+const apiBase = window.BELLECURE_API_BASE || (
+  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : 'https://bellecure-website.onrender.com'
+);
 
 function renderLogin() {
   app.innerHTML = `
