@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bellecure Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#DA251D',
+              dark: '#0f172a',
+              blue: '#0ea5e9'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 antialiased">
+  <div id="app" class="min-h-screen"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

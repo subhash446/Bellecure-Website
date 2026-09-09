@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bellecure Agro Food & Co. | Premium Packaged Drinking Water</title>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#DA251D', /* Updated to match the specific vibrant red from the bottle label */
+                            blue: '#0ea5e9',
+                            white: '#ffffff',
+                            dark: '#0f172a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom styles for animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Simulates the bold, tightly packed typography on the bottle */
+        .bellecure-logo {
+            font-weight: 800;
+            color: #DA251D;
+            letter-spacing: -0.05em;
+        }
+
+        /* Simulating the dimpled texture of the bottle on some backgrounds */
+        .bottle-texture {
+            background-color: transparent;
+            background-image: radial-gradient(#0ea5e9 0.5px, transparent 0.5px), radial-gradient(#0ea5e9 0.5px, #ffffff 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.03;
+        }
+        .assistant-shell {
+            position: relative;
+            display: inline-block;
+        }
+
+        .assistant-ripple {
+            position: absolute;
+            inset: -12px;
+            border-radius: 9999px;
+            border: 1px solid rgba(56, 189, 248, 0.9);
+            box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2), 0 0 18px rgba(125, 211, 252, 0.45);
+            opacity: 0;
+            animation: assistantRipple 3.6s ease-out infinite;
+            pointer-events: none;
+        }
+
+        .assistant-ripple::before,
+        .assistant-ripple::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1px solid rgba(96, 165, 250, 0.75);
+            box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.14), 0 0 18px rgba(147, 197, 253, 0.36);
+            animation: assistantRipple 3.6s ease-out infinite;
+        }
+
+        .assistant-ripple::before {
+            animation-delay: 1.2s;
+        }
+
+        .assistant-ripple::after {
+            animation-delay: 2.4s;
+        }
+
+        .assistant-button {
+            position: relative;
+            overflow: hidden;
+            transform-origin: center bottom;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+        }
+
+        .assistant-button::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.20) 38%, rgba(248, 181, 177, 0.24) 48%, transparent 62%);
+            transform: translateX(-140%);
+            animation: assistantShimmer 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .assistant-button:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 16px 28px rgba(181, 45, 36, 0.20);
+        }
+
+        .assistant-panel {
+            position: relative;
+            opacity: 0;
+            transform: translateY(12px) scale(0.97);
+            transform-origin: bottom right;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            overflow: visible;
+        }
+
+        .assistant-panel::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 1.2rem;
+            padding: 2px;
+            background: conic-gradient(
+                from 0deg,
+                rgba(125, 211, 252, 0.9),
+                rgba(255,255,255,0.98),
+                rgba(56, 189, 248, 1),
+                rgba(96, 165, 250, 1),
+                rgba(147, 197, 253, 0.9),
+                rgba(255,255,255,0.8),
+                rgba(125, 211, 252, 0.9)
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: assistantBorderSpin 2.4s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7));
+        }
+
+        .assistant-panel > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .assistant-panel.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .assistant-input-shell {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+        }
+
+        .assistant-input-field {
+            position: relative;
+            flex: 1;
+            min-width: 0;
+            border: 2px solid #DA251D;
+            border-radius: 9999px;
+            background: rgba(255,255,255,0.98);
+            color: #1f2937;
+            padding: 0.75rem 1rem;
+            outline: none;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+            overflow: visible;
+        }
+
+        .assistant-input-field::before {
+            content: "";
+            position: absolute;
+            inset: -1.5px;
+            border-radius: inherit;
+            background: conic-gradient(
+                from 0deg,
+                rgba(0, 217, 255, 0) 0deg,
+                rgba(0, 217, 255, 0.2) 35deg,
+                rgba(0, 217, 255, 0.95) 75deg,
+                rgba(77, 124, 254, 1) 130deg,
+                rgba(255,255,255,0.9) 165deg,
+                rgba(0, 217, 255, 0.2) 220deg,
+                rgba(0, 217, 255, 0) 290deg,
+                rgba(0, 217, 255, 0) 360deg
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 1.2px;
+            opacity: 0;
+            animation: assistantInputTrail 4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .assistant-panel.is-visible .assistant-input-field::before {
+            opacity: 1;
+        }
+
+        .assistant-input-field:focus {
+            box-shadow: 0 0 0 2px rgba(218, 37, 29, 0.08);
+        }
+
+        .assistant-input-shell > button {
+            position: relative;
+            z-index: 2;
+        }
+
+        .assistant-thinking {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(218, 37, 29, 0.06);
+            border: 1px solid rgba(218, 37, 29, 0.12);
+        }
+
+        .assistant-thinking span {
+            width: 6px;
+            height: 6px;
+            border-radius: 9999px;
+            background: rgba(218, 37, 29, 0.8);
+            display: inline-block;
+            animation: assistantDotPulse 1.4s ease-in-out infinite;
+        }
+
+        .assistant-thinking span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .assistant-thinking span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes assistantRipple {
+            0% {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            20% {
+                opacity: 0.55;
+            }
+            60% {
+                opacity: 0.28;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes assistantShimmer {
+            0%, 100% {
+                transform: translateX(-140%);
+            }
+            20%, 60% {
+                transform: translateX(140%);
+            }
+        }
+
+        @keyframes assistantDotPulse {
+            0%, 80%, 100% {
+                opacity: 0.35;
+                transform: translateY(0);
+            }
+            40% {
+                opacity: 1;
+                transform: translateY(-2px);
+            }
+        }
+
+        @keyframes assistantBorderSpin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes assistantInputTrail {
+            0% {
+                transform: rotate(0deg);
+                opacity: 0.3;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .assistant-ripple,
+            .assistant-ripple::before,
+            .assistant-ripple::after,
+            .assistant-button::before,
+            .assistant-thinking span {
+                animation: none;
+            }
+
+            .assistant-panel,
+            .assistant-button {
+                transition: none;
+            }
+        }    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased bg-gray-50 overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100"
+        id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <i class="fa-solid fa-droplet text-brand-blue text-2xl"></i>
+                    <span class="text-3xl bellecure-logo">Bellecure</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-gray-600 hover:text-brand-red font-medium transition">Home</a>
+                    <a href="#products" class="text-gray-600 hover:text-brand-red font-medium transition">Products</a>
+                    <a href="#quality" class="text-gray-600 hover:text-brand-red font-medium transition">Quality</a>
+                    <a href="#distributor" class="text-gray-600 hover:text-brand-red font-medium transition">Partner
+                        with us</a>
+                </div>
+                <div class="hidden md:flex items-center gap-4">
+                    <button id="adminLoginBtn" type="button"
+                        class="bg-white border border-gray-300 text-gray-700 px-5 py-2.5 rounded-md font-medium hover:border-brand-red hover:text-brand-red transition shadow-sm">Admin</button>
+                    <a href="#contact"
+                        class="bg-brand-red text-white px-7 py-2.5 rounded-md font-bold hover:bg-red-700 transition shadow-lg shadow-red-500/30">Contact
+                        Us</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand-red focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t fixed w-full top-20 left-0 shadow-lg z-40">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+                <a href="#home" class="block px-3 py-2 text-gray-600 hover:text-brand-red font-medium">Home</a>
+                <a href="#products" class="block px-3 py-2 text-gray-600 hover:text-brand-red font-medium">Products</a>
+                <a href="#quality" class="block px-3 py-2 text-gray-600 hover:text-brand-red font-medium">Quality</a>
+                <a href="#distributor" class="block px-3 py-2 text-gray-600 hover:text-brand-red font-medium">Partner
+                    with us</a>
+                <button id="mobileAdminLoginBtn" type="button" class="block w-full px-3 py-2 text-gray-700 hover:text-brand-red font-medium">Admin</button>
+                <a href="#contact" class="block px-3 py-2 text-brand-red font-bold">Contact Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="adminLoginModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-900/40 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden border border-gray-200">
+            <div class="bg-gradient-to-r from-brand-red to-red-700 px-6 py-5 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.2em] text-red-100">Secure access</p>
+                        <h3 class="text-2xl font-bold mt-1">Admin Login</h3>
+                    </div>
+                    <button id="closeAdminLoginModal" type="button" class="text-white/90 hover:text-white text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <label for="adminEmail" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <input id="adminEmail" type="email" placeholder="Enter admin email"
+                    class="w-full px-4 py-3 rounded-sm border border-gray-300 focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition mb-4" />
+
+                <label for="adminPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <input id="adminPassword" type="password" placeholder="Enter admin password"
+                    class="w-full px-4 py-3 rounded-sm border border-gray-300 focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition" />
+
+                <p id="adminLoginError" class="hidden mt-3 text-sm text-red-600"></p>
+
+                <button id="adminLoginSubmit" type="button"
+                    class="mt-5 w-full bg-brand-red text-white py-3 rounded-sm font-bold hover:bg-red-700 transition">
+                    Login to dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home"
+        class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-gradient-to-b from-sky-100 via-sky-50/50 to-white">
+        <!-- Soft water texture background -->
+        <div class="absolute inset-0 z-0 opacity-10">
+            <img src="images/background.jpeg" alt="Water Background"
+                class="w-full h-full object-cover mix-blend-multiply">
+        </div>
+        <!-- Subtle water-themed gradient overlay -->
+        <div class="absolute inset-0 z-0 bg-gradient-to-b from-brand-blue/5 via-white/50 to-white pointer-events-none">
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="fade-in-up">
+                <span
+                    class="inline-block py-1 px-4 rounded-sm bg-brand-red/10 text-brand-red text-sm font-bold tracking-wider mb-4 border border-brand-red/20 uppercase">Premium
+                    Packaged Drinking Water</span>
+                <h1
+                    class="text-4xl md:text-5xl lg:text-7xl font-extrabold text-brand-dark mb-6 leading-tight tracking-tight">
+                    Pure Water, Built for <br />Trust, Quality, and Growth <span
+                        class="bg-brand-red text-white px-4 py-1 rounded-sm inline-block transform -rotate-2 shadow-xl shadow-red-500/20">Everyday</span>
+                </h1>
+                <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
+                    Bellecure brings advanced RO + UV + UF purification to homes, offices, and retail spaces across Darbhanga with a premium, dependable experience.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#distributor"
+                        class="bg-brand-red text-white px-8 py-3.5 rounded-sm font-bold text-lg hover:bg-red-700 hover:scale-105 transition duration-300 shadow-xl shadow-red-500/40">Become
+                        a Distributor</a>
+                    <a href="#products"
+                        class="bg-white text-gray-800 border-2 border-gray-200 px-8 py-3.5 rounded-sm font-bold text-lg hover:border-brand-red hover:text-brand-red hover:scale-105 transition duration-300">View
+                        Products</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust / Badges Section -->
+    <section class="py-10 bg-white relative z-10 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-100 fade-in-up">
+                    <i class="fa-solid fa-shield-halved text-4xl text-brand-blue mb-4"></i>
+                    <h3 class="text-lg font-bold text-brand-dark">100% Safe & Pure</h3>
+                    <p class="text-gray-500 mt-2 text-sm">Multi-stage RO + UV + UF</p>
+                </div>
+                <div class="bg-brand-red/5 p-6 rounded-lg shadow-sm border border-brand-red/20 fade-in-up"
+                    style="transition-delay: 100ms;">
+                    <i class="fa-solid fa-check-to-slot text-4xl text-brand-red mb-4"></i>
+                    <h3 class="text-lg font-bold text-brand-red">GST Registered</h3>
+                    <p class="text-gray-600 mt-2 text-sm">Transparent & Certified Business</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-100 fade-in-up"
+                    style="transition-delay: 200ms;">
+                    <i class="fa-solid fa-certificate text-4xl text-brand-blue mb-4"></i>
+                    <h3 class="text-lg font-bold text-brand-dark">FSSAI Certified</h3>
+                    <p class="text-gray-500 mt-2 text-sm">Government Approved Food Safety License</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-100 fade-in-up"
+                    style="transition-delay: 300ms;">
+                    <i class="fa-solid fa-location-dot text-4xl text-brand-blue mb-4"></i>
+                    <h3 class="text-lg font-bold text-brand-dark">Local Production</h3>
+                    <p class="text-gray-500 mt-2 text-sm">Proudly manufactured in Darbhanga</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story / Why Choose Bellecure -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-4xl mx-auto mb-12 fade-in-up">
+                <h2 class="text-brand-red font-bold tracking-wider uppercase text-sm mb-2">Why Choose Bellecure</h2>
+                <h3 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4 leading-tight">Pure water you can trust, every single day</h3>
+                <p class="text-gray-600 text-lg leading-relaxed">Bellecure is built around purity, consistency, and confidence. From households and offices to retail and distribution networks, we deliver bottled water that feels premium, safe, and dependable from the first sip to the last.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-14">
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 shadow-sm fade-in-up">
+                    <div class="w-12 h-12 rounded-lg bg-brand-red/10 flex items-center justify-center text-brand-red text-xl mb-4">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-dark mb-3">Purity First</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Our purification process is designed to meet the highest standards of hygiene, helping customers enjoy safe, refreshing water with peace of mind.</p>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 shadow-sm fade-in-up" style="transition-delay: 100ms;">
+                    <div class="w-12 h-12 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue text-xl mb-4">
+                        <i class="fa-solid fa-certificate"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-dark mb-3">Quality You Can Feel</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">With careful packaging, dependable quality checks, and a product built for everyday use, Bellecure brings a premium standard to every bottle.</p>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 shadow-sm fade-in-up" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl mb-4">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-dark mb-3">Built for Trust</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">We focus on reliability, service, and long-term relationships that help families, businesses, and partners grow with confidence.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-50 relative">
+        <div class="absolute inset-0 bottle-texture z-0"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16 fade-in-up">
+                <h2 class="text-brand-red font-bold tracking-wider uppercase text-sm mb-2">Our Range</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-brand-dark mb-4">The Perfect Size For Every Need
+                </h3>
+                <p class="text-gray-600">Untouched by human hands. Hygienically packed to ensure maximum purity.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Product 1 -->
+                <div
+                    class="group bg-white rounded-xl p-8 text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-gray-100 fade-in-up shadow-sm">
+                    <div class="relative h-64 mb-6 mx-auto w-full flex items-center justify-center">
+                        <div
+                            class="absolute inset-0 bg-brand-red/5 rounded-full opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-500 ease-out z-0">
+                        </div>
+                        <img src="images/250ml.jpeg" alt="250ml Water Bottle"
+                            class="h-full object-contain relative z-10 drop-shadow-xl group-hover:scale-110 transition-transform duration-500 mix-blend-multiply">
+                    </div>
+                    <div class="bg-gray-100 text-brand-dark text-xs font-bold px-3 py-1 rounded-sm inline-block mb-3">
+                        Travel Pack</div>
+                    <h4 class="text-3xl font-extrabold text-brand-red mb-2 tracking-tight">250 ML</h4>
+                    <p class="text-gray-500 text-sm">Easy to carry, perfectly suited for travel, parties, and quick
+                        hydration.</p>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="group bg-white rounded-xl p-8 text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-2 border-brand-red relative fade-in-up shadow-lg transform md:-translate-y-4"
+                    style="transition-delay: 100ms;">
+                    <div
+                        class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-brand-red text-white text-xs font-bold px-4 py-1.5 rounded-sm shadow-lg z-20 uppercase tracking-widest">
+                        Most Popular</div>
+                    <div class="relative h-64 mb-6 mx-auto w-full flex items-center justify-center mt-4">
+                        <div
+                            class="absolute inset-0 bg-brand-red/5 rounded-full opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-500 ease-out z-0">
+                        </div>
+                        <img src="images/500ml.jpeg" alt="500ml Water Bottle"
+                            class="h-full object-contain relative z-10 drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 mix-blend-multiply">
+                    </div>
+                    <div
+                        class="bg-gray-100 text-brand-dark text-xs font-bold px-3 py-1 rounded-sm inline-block mb-3 relative z-10">
+                        Daily Use</div>
+                    <h4 class="text-3xl font-extrabold text-brand-red mb-2 relative z-10 tracking-tight">500 ML</h4>
+                    <p class="text-gray-500 text-sm relative z-10">Your perfect daily companion. Ideal for work, gym,
+                        and regular hydration routines.</p>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="group bg-white rounded-xl p-8 text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-gray-100 fade-in-up shadow-sm"
+                    style="transition-delay: 200ms;">
+                    <div class="relative h-64 mb-6 mx-auto w-full flex items-center justify-center">
+                        <div
+                            class="absolute inset-0 bg-brand-red/5 rounded-full opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-500 ease-out z-0">
+                        </div>
+                        <img src="images/1000ml.jpeg" alt="1 Litre Water Bottle"
+                            class="h-full object-contain relative z-10 drop-shadow-xl group-hover:scale-110 transition-transform duration-500 mix-blend-multiply">
+                    </div>
+                    <div class="bg-gray-100 text-brand-dark text-xs font-bold px-3 py-1 rounded-sm inline-block mb-3">
+                        Family Pack</div>
+                    <h4 class="text-3xl font-extrabold text-brand-red mb-2 tracking-tight">1 Litre</h4>
+                    <p class="text-gray-500 text-sm">Ideal for families, long trips, and office desks. Stay hydrated all
+                        day long.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manufacturing & Quality Section -->
+    <section id="quality" class="py-20 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <!-- Image side -->
+                <div class="w-full lg:w-1/2 relative fade-in-up">
+                    <div class="absolute -inset-4 bg-gray-100 rounded-xl transform rotate-3"></div>
+                    <img src="images/hero.jpeg" alt="Hygienic Plant"
+                        class="relative rounded-xl shadow-2xl object-cover h-[500px] w-full">
+
+                    <!-- Floating badge -->
+                    <div class="absolute -bottom-6 -right-6 bg-brand-red p-4 rounded-lg shadow-xl border border-red-500 flex items-center gap-4 animate-bounce"
+                        style="animation-duration: 3s;">
+                        <div
+                            class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand-red text-2xl">
+                            <i class="fa-solid fa-microscope"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-red-100">Tested across</p>
+                            <p class="font-bold text-white">100+ Parameters</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content side -->
+                <div class="w-full lg:w-1/2 fade-in-up" style="transition-delay: 200ms;">
+                    <h2 class="text-brand-red font-bold tracking-wider uppercase text-sm mb-2">Our Quality Promise</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-brand-dark mb-6 tracking-tight">State-of-the-Art
+                        Purification Process</h3>
+                    <p class="text-gray-600 mb-8 border-l-4 border-brand-red pl-4">
+                        At Bellecure Agro Food & Co., every drop goes through a rigorous multi-stage purification
+                        process to ensure it is 100% safe, clean, and refreshing.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 rounded-sm bg-brand-red text-white flex items-center justify-center font-bold">
+                                1</div>
+                            <div>
+                                <h4 class="text-xl font-bold text-brand-dark">RO (Reverse Osmosis)</h4>
+                                <p class="text-gray-500 mt-1">Removes excess dissolved solids and impurities to give it
+                                    a crisp taste.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 rounded-sm bg-brand-red text-white flex items-center justify-center font-bold">
+                                2</div>
+                            <div>
+                                <h4 class="text-xl font-bold text-brand-dark">UV (Ultra Violet) Treatment</h4>
+                                <p class="text-gray-500 mt-1">Eliminates harmful bacteria and viruses ensuring
+                                    biological purity.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 rounded-sm bg-brand-red text-white flex items-center justify-center font-bold">
+                                3</div>
+                            <div>
+                                <h4 class="text-xl font-bold text-brand-dark">UF (Ultra Filtration)</h4>
+                                <p class="text-gray-500 mt-1">Fine filtration to ensure crystal clear transparency in
+                                    every bottle.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Features -->
+    <section class="py-20 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-5xl mx-auto mb-12 fade-in-up">
+                <h2 class="text-brand-red font-bold tracking-wider uppercase text-sm mb-2">Key Features</h2>
+                <h3 class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">A modern business experience built for trust, clarity, and growth</h3>
+                <p class="text-gray-300 text-lg leading-relaxed">Bellecure brings together strong branding, clear communication, and a dependable customer experience designed to help people understand the product, trust the quality, and take the next step with confidence.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 fade-in-up">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">AI Support</h4>
+                    <p class="text-gray-300 text-sm leading-relaxed">Instant guidance for customers and partners, helping answer common questions quickly and improve the buying experience.</p>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 fade-in-up" style="transition-delay: 100ms;">
+                    <div class="w-12 h-12 rounded-xl bg-sky-500/15 text-sky-400 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Lead Capture</h4>
+                    <p class="text-gray-300 text-sm leading-relaxed">A simple inquiry process that helps customers and business partners connect quickly and start meaningful conversations.</p>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 fade-in-up" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-bottle-water"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Product Showcase</h4>
+                    <p class="text-gray-300 text-sm leading-relaxed">A clean presentation of the product range helps visitors understand the value, compare choices, and feel informed before they reach out.</p>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 fade-in-up" style="transition-delay: 300ms;">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-certificate"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Trust Building</h4>
+                    <p class="text-gray-300 text-sm leading-relaxed">Professional presentation, clear messaging, and consistent branding help establish confidence from the very first visit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Review / Testimonials Section -->
+    <section id="reviews" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-4xl mx-auto mb-12 fade-in-up">
+                <h2 class="text-brand-red font-bold tracking-wider uppercase text-sm mb-2">Customer Reviews</h2>
+                <h3 class="text-3xl md:text-5xl font-extrabold text-brand-dark mb-4 leading-tight">Trusted by families, retailers & partners</h3>
+                <p class="text-gray-600 text-lg">A few of the voices that keep us growing. You can replace these later with your own real reviews.</p>
+            </div>
+
+            <div class="relative max-w-5xl mx-auto">
+                <button type="button" data-review-prev aria-label="Previous review" class="absolute left-[-18px] md:left-[-28px] top-1/2 -translate-y-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-lg shadow-gray-200/70 transition hover:-translate-y-1 hover:text-brand-red">
+                    <i class="fa-solid fa-chevron-left text-lg"></i>
+                </button>
+
+                <button type="button" data-review-next aria-label="Next review" class="absolute right-[-18px] md:right-[-28px] top-1/2 -translate-y-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-lg shadow-gray-200/70 transition hover:-translate-y-1 hover:text-brand-red">
+                    <i class="fa-solid fa-chevron-right text-lg"></i>
+                </button>
+
+                <div id="reviewCarousel" class="overflow-hidden rounded-[28px] border border-gray-200 bg-gradient-to-br from-gray-50 to-white shadow-[0_20px_60px_rgba(15,23,42,0.07)]">
+                    <div class="p-6 md:p-10 lg:p-12">
+                        <div data-review-card class="transition-all duration-500">
+                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                                <div class="relative shrink-0">
+                                    <div class="absolute inset-0 rounded-full bg-brand-red/10 blur-xl scale-110"></div>
+                                    <img src="images/logo.jpeg" alt="Customer review profile" class="relative w-24 h-24 rounded-full object-cover border-4 border-brand-red/20 shadow-lg ring-4 ring-white">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="mb-4 flex items-center gap-2 text-brand-red">
+                                        <i class="fa-solid fa-quote-left text-xl"></i>
+                                        <span class="text-xs font-bold uppercase tracking-[0.2em]">Verified customer</span>
+                                    </div>
+                                    <p class="text-xl md:text-2xl text-gray-800 leading-relaxed font-medium">“Bellecure water is always clean, fresh, and reliable. The quality feels premium and consistent every time.”</p>
+                                    <div class="mt-6">
+                                        <p class="font-extrabold text-brand-dark text-xl">Aarav Tiwari</p>
+                                        <p class="text-sm text-gray-500 mt-1">Home Customer</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-review-card class="hidden transition-all duration-500">
+                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                                <div class="relative shrink-0">
+                                    <div class="absolute inset-0 rounded-full bg-brand-red/10 blur-xl scale-110"></div>
+                                    <img src="images/hero.jpeg" alt="Customer review profile" class="relative w-24 h-24 rounded-full object-cover border-4 border-brand-red/20 shadow-lg ring-4 ring-white">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="mb-4 flex items-center gap-2 text-brand-red">
+                                        <i class="fa-solid fa-quote-left text-xl"></i>
+                                        <span class="text-xs font-bold uppercase tracking-[0.2em]">Retail partner</span>
+                                    </div>
+                                    <p class="text-xl md:text-2xl text-gray-800 leading-relaxed font-medium">“The packaging looks premium and the delivery is always on time. Perfect for our retail shop.”</p>
+                                    <div class="mt-6">
+                                        <p class="font-extrabold text-brand-dark text-xl">Neha Kesari</p>
+                                        <p class="text-sm text-gray-500 mt-1">Retail Partner</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-review-card class="hidden transition-all duration-500">
+                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                                <div class="relative shrink-0">
+                                    <div class="absolute inset-0 rounded-full bg-brand-red/10 blur-xl scale-110"></div>
+                                    <img src="images/background.jpeg" alt="Customer review profile" class="relative w-24 h-24 rounded-full object-cover border-4 border-brand-red/20 shadow-lg ring-4 ring-white">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="mb-4 flex items-center gap-2 text-brand-red">
+                                        <i class="fa-solid fa-quote-left text-xl"></i>
+                                        <span class="text-xs font-bold uppercase tracking-[0.2em]">Corporate client</span>
+                                    </div>
+                                    <p class="text-xl md:text-2xl text-gray-800 leading-relaxed font-medium">“We trust Bellecure for office use and family consumption because the quality is always top class.”</p>
+                                    <div class="mt-6">
+                                        <p class="font-extrabold text-brand-dark text-xl">Rohit Aggrawal</p>
+                                        <p class="text-sm text-gray-500 mt-1">Corporate Client</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-review-card class="hidden transition-all duration-500">
+                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                                <div class="relative shrink-0">
+                                    <div class="absolute inset-0 rounded-full bg-brand-red/10 blur-xl scale-110"></div>
+                                    <img src="images/500ml.jpeg" alt="Customer review profile" class="relative w-24 h-24 rounded-full object-cover border-4 border-brand-red/20 shadow-lg ring-4 ring-white">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="mb-4 flex items-center gap-2 text-brand-red">
+                                        <i class="fa-solid fa-quote-left text-xl"></i>
+                                        <span class="text-xs font-bold uppercase tracking-[0.2em]">Daily user</span>
+                                    </div>
+                                    <p class="text-xl md:text-2xl text-gray-800 leading-relaxed font-medium">“The 500ml bottle is very convenient and has become part of our daily routine.”</p>
+                                    <div class="mt-6">
+                                        <p class="font-extrabold text-brand-dark text-xl">Priya Shah</p>
+                                        <p class="text-sm text-gray-500 mt-1">Daily User</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-review-card class="hidden transition-all duration-500">
+                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                                <div class="relative shrink-0">
+                                    <div class="absolute inset-0 rounded-full bg-brand-red/10 blur-xl scale-110"></div>
+                                    <img src="images/1000ml.jpeg" alt="Customer review profile" class="relative w-24 h-24 rounded-full object-cover border-4 border-brand-red/20 shadow-lg ring-4 ring-white">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="mb-4 flex items-center gap-2 text-brand-red">
+                                        <i class="fa-solid fa-quote-left text-xl"></i>
+                                        <span class="text-xs font-bold uppercase tracking-[0.2em]">Distributor</span>
+                                    </div>
+                                    <p class="text-xl md:text-2xl text-gray-800 leading-relaxed font-medium">“Their service and quality make them a strong choice for distributors and local businesses alike.”</p>
+                                    <div class="mt-6">
+                                        <p class="font-extrabold text-brand-dark text-xl">Sanjay Tiwari</p>
+                                        <p class="text-sm text-gray-500 mt-1">Distributor</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-3 mt-8">
+                    <button type="button" data-review-dot class="w-3.5 h-3.5 rounded-full bg-brand-red shadow-sm transition-all duration-300" aria-label="Review 1"></button>
+                    <button type="button" data-review-dot class="w-3.5 h-3.5 rounded-full bg-gray-300 shadow-sm transition-all duration-300" aria-label="Review 2"></button>
+                    <button type="button" data-review-dot class="w-3.5 h-3.5 rounded-full bg-gray-300 shadow-sm transition-all duration-300" aria-label="Review 3"></button>
+                    <button type="button" data-review-dot class="w-3.5 h-3.5 rounded-full bg-gray-300 shadow-sm transition-all duration-300" aria-label="Review 4"></button>
+                    <button type="button" data-review-dot class="w-3.5 h-3.5 rounded-full bg-gray-300 shadow-sm transition-all duration-300" aria-label="Review 5"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results / CTA Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-brand-red to-red-700 rounded-3xl p-8 md:p-12 text-white shadow-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <div class="lg:col-span-2">
+                        <p class="text-sm font-bold uppercase tracking-[0.2em] text-red-100 mb-3">Project Results</p>
+                        <h3 class="text-3xl md:text-4xl font-extrabold leading-tight mb-4">Built to create trust, generate leads, and support business growth.</h3>
+                        <p class="text-red-50 max-w-2xl">Bellecure combines brand storytelling, product clarity, and customer support into one digital experience aimed at strengthening local market presence.</p>
+                    </div>
+                    <div class="flex justify-center lg:justify-end">
+                        <a href="#distributor" class="bg-white text-brand-red px-8 py-4 rounded-sm font-bold hover:bg-gray-100 transition shadow-lg">Start a Partnership</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Distributor Form Section -->
+    <section id="distributor" class="py-20 relative bg-brand-dark overflow-hidden">
+        <!-- Abstract background elements to match the red aesthetic -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+            <div class="absolute w-[500px] h-[500px] bg-brand-red/20 rounded-full blur-3xl -top-20 -left-20"></div>
+            <div class="absolute w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-3xl -bottom-20 -right-20"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+                <!-- Left side content (Updated to Red Theme) -->
+                <div
+                    class="w-full lg:w-5/12 bg-gradient-to-br from-brand-red to-red-900 p-10 lg:p-12 text-white flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute right-0 top-0 opacity-10">
+                        <i class="fa-solid fa-droplet text-9xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-extrabold mb-4 relative z-10">Partner With Bellecure</h3>
+                    <p class="text-red-100 mb-8 relative z-10">Join the fastest growing FMCG brand in Bihar. We are
+                        actively looking for distributors and retail partners in and around Darbhanga.</p>
+
+                    <ul class="space-y-4 mb-8 relative z-10">
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-circle-check text-white"></i>
+                            <span class="font-medium">High Profit Margins</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-circle-check text-white"></i>
+                            <span class="font-medium">Marketing & Branding Support</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-circle-check text-white"></i>
+                            <span class="font-medium">Reliable Supply Chain</span>
+                        </li>
+                    </ul>
+
+                    <div class="mt-auto pt-8 border-t border-red-500/50 relative z-10">
+                        <p class="text-sm text-red-200">Direct Contact:</p>
+                        <p class="text-xl font-bold mt-1"><i class="fa-solid fa-phone mr-2"></i> +91 8700905571</p>
+                    </div>
+                </div>
+
+                <!-- Right side form -->
+                <div class="w-full lg:w-7/12 p-10 lg:p-12 fade-in-up">
+                    <h3 class="text-2xl font-bold text-brand-dark mb-6 tracking-tight">Distributor Inquiry Form</h3>
+                    <form id="distributorForm" class="space-y-5">
+                        <div class="flex items-center gap-2 text-sm text-gray-600 mb-1">
+                            <span class="w-2 h-2 rounded-full bg-brand-red inline-block"></span>
+                            <span>All fields are mandatory</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Full Name <span class="text-brand-red text-xs">●</span>
+                                </label>
+                                <input type="text" id="from_name" name="from_name" required minlength="2"
+                                    class="w-full px-4 py-3 rounded-sm border border-gray-300 focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition"
+                                    placeholder="e.g. Mr. Subhash">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Mobile Number <span class="text-brand-red text-xs">●</span>
+                                </label>
+                                <input type="tel" id="phone_number" name="phone_number" required inputmode="numeric" minlength="10" maxlength="15"
+                                    class="w-full px-4 py-3 rounded-sm border border-gray-300 focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition"
+                                    placeholder="e.g. 9876543210">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    City / Pin Code <span class="text-brand-red text-xs">●</span>
+                                </label>
+                                <input type="text" id="city" name="city" required minlength="2"
+                                    class="w-full px-4 py-3 rounded-sm border border-gray-300 focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition"
+                                    placeholder="e.g. Darbhanga, 846004">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    State <span class="text-brand-red text-xs">●</span>
+                                </label>
+                                <select id="state" name="state" required
+                                    class="w-full px-4 py-3 rounded-sm border border-gray-300 focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition bg-white">
+                                    <option value="" disabled selected>Select your state</option>
+                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                    <option value="Assam">Assam</option>
+                                    <option value="Bihar">Bihar</option>
+                                    <option value="Chhattisgarh">Chhattisgarh</option>
+                                    <option value="Goa">Goa</option>
+                                    <option value="Gujarat">Gujarat</option>
+                                    <option value="Haryana">Haryana</option>
+                                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                    <option value="Jharkhand">Jharkhand</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Kerala">Kerala</option>
+                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                    <option value="Manipur">Manipur</option>
+                                    <option value="Meghalaya">Meghalaya</option>
+                                    <option value="Mizoram">Mizoram</option>
+                                    <option value="Nagaland">Nagaland</option>
+                                    <option value="Odisha">Odisha</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Rajasthan">Rajasthan</option>
+                                    <option value="Sikkim">Sikkim</option>
+                                    <option value="Tamil Nadu">Tamil Nadu</option>
+                                    <option value="Telangana">Telangana</option>
+                                    <option value="Tripura">Tripura</option>
+                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                    <option value="Uttarakhand">Uttarakhand</option>
+                                    <option value="West Bengal">West Bengal</option>
+                                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                    <option value="Chandigarh">Chandigarh</option>
+                                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                    <option value="Ladakh">Ladakh</option>
+                                    <option value="Lakshadweep">Lakshadweep</option>
+                                    <option value="Puducherry">Puducherry</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                District <span class="text-brand-red text-xs">●</span>
+                            </label>
+                            <select id="district" name="district" required disabled
+                                class="w-full px-4 py-3 rounded-sm border border-gray-300 bg-gray-100 text-gray-500 focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition">
+                                <option value="" disabled selected>Select your district</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Business Type <span class="text-brand-red text-xs">●</span>
+                            </label>
+                            <select id="business_type" name="business_type" required
+                                class="w-full px-4 py-3 rounded-sm border border-gray-300 focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none transition bg-white">
+                                <option value="" disabled selected>Select your business type</option>
+                                <option value="distributor">Wholesale Distributor</option>
+                                <option value="retailer">Retail Shop / Mart</option>
+                                <option value="corporate">Corporate / Event Needs</option>
+                                <option value="restaurant">Hotel / Restaurant</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" id="submitBtn"
+                            class="w-full bg-brand-red text-white py-4 rounded-sm font-bold text-lg hover:bg-red-700 transition duration-300 shadow-lg shadow-red-500/30 flex justify-center items-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed">
+                            <span id="submitText">Submit Inquiry</span>
+                            <i id="submitIcon" class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                        <!-- Form Error Message Container (Inline) -->
+                        <div id="formMessage" class="hidden mt-4 p-3 rounded-md text-sm font-medium text-center"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Modal Popup -->
+    <div id="successModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity opacity-0 duration-300"
+            id="modalOverlay"></div>
+        <div class="bg-white rounded-xl shadow-2xl p-8 max-w-sm w-full mx-4 relative z-10 transform scale-95 opacity-0 transition-all duration-300"
+            id="modalContent">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-check text-3xl text-green-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-center text-gray-900 mb-2">Success!</h3>
+            <p class="text-center text-gray-600 mb-6 font-medium">Thank you! We will contact you soon.</p>
+            <button id="closeModalBtn"
+                class="w-full bg-brand-red text-white py-3 rounded-sm font-bold hover:bg-red-700 transition">
+                Okay
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer id="contact" class="bg-gray-900 text-white pt-16 pb-8 border-t-4 border-brand-red">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-droplet text-brand-red text-3xl"></i>
+                        <span class="text-3xl bellecure-logo" style="color: white !important;">Bellecure</span>
+                    </div>
+                    <p class="text-gray-400 mb-6 max-w-sm">
+                        Bellecure Agro Food & Co.<br>
+                        Premium packaged drinking water designed for trust, freshness, and customer confidence across homes, offices, and retail partners.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://www.facebook.com/share/1EEXMQ1mJ1/" target="_blank" rel="noopener noreferrer"
+                            class="w-10 h-10 rounded-sm bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand-red hover:text-white transition" aria-label="Bellecure Facebook"><i
+                                class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/bellecurewater" target="_blank" rel="noopener noreferrer"
+                            class="w-10 h-10 rounded-sm bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand-red hover:text-white transition" aria-label="Bellecure Instagram"><i
+                                class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-bold mb-4 font-sans text-white border-b border-gray-700 pb-2 inline-block">
+                        Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition"><i
+                                    class="fa-solid fa-angle-right mr-2 text-brand-red"></i> Home</a></li>
+                        <li><a href="#products" class="text-gray-400 hover:text-white transition"><i
+                                    class="fa-solid fa-angle-right mr-2 text-brand-red"></i> Products</a></li>
+                        <li><a href="#quality" class="text-gray-400 hover:text-white transition"><i
+                                    class="fa-solid fa-angle-right mr-2 text-brand-red"></i> Quality</a></li>
+                        <li><a href="#distributor" class="text-gray-400 hover:text-white transition"><i
+                                    class="fa-solid fa-angle-right mr-2 text-brand-red"></i> Partner Program</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-bold mb-4 font-sans text-white border-b border-gray-700 pb-2 inline-block">
+                        Contact Info</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-location-dot mt-1 text-brand-red"></i>
+                            <span class="text-gray-400">Bellecure Agro Food & Co.<br>Darbhanga, Bihar, India</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-phone text-brand-red"></i>
+                            <span class="text-gray-400">+91 8700905571</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-brand-red"></i>
+                            <span class="text-gray-400">contact@bellecure.in</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="border-t border-gray-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>&copy; 2026 Bellecure Agro Food & Co. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 space-x-4">
+                    <a href="#" class="hover:text-gray-300 tracking-wider">Privacy Policy</a>
+                    <a href="#" class="hover:text-gray-300 tracking-wider">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Assistant -->
+    <div class="fixed bottom-24 right-6 z-[60]">
+        <div class="assistant-shell">
+            <span class="assistant-ripple" aria-hidden="true"></span>
+            <button id="assistantToggle"
+                class="assistant-button bg-brand-red text-white px-4 py-3 rounded-full shadow-xl flex items-center gap-2 font-semibold border border-white/20">
+                <i class="fa-solid fa-headset"></i>
+                <span>Bellecure Assistant</span>
+            </button>
+        </div>
+
+        <div id="assistantPanel" class="assistant-panel hidden mt-3 w-[380px] max-w-[90vw] rounded-2xl border border-gray-200 bg-white shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-brand-red to-red-700 p-4 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-bold">Bellecure Assistant</p>
+                        <p class="text-sm text-red-100">Ask about products and quality</p>
+                    </div>
+                    <button id="assistantClose" class="text-white/90 hover:text-white">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="assistantMessages" class="p-4 space-y-3 max-h-[440px] overflow-y-auto bg-gray-50">
+                <div class="bg-white border border-gray-200 rounded-lg p-3 text-sm text-gray-700 shadow-sm">
+                    Hi! I can help with product details, purity, bottle sizes, and quality information.
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200 bg-white">
+                <div class="assistant-input-shell">
+                    <input id="assistantInput" type="text" placeholder="Ask about Bellecure products..."
+                        class="assistant-input-field flex-1 px-3 py-2 focus:ring-2 focus:ring-brand-red focus:border-brand-red outline-none bg-white">
+                    <button id="assistantSend" class="bg-brand-red text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-700 transition">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/8700905571" target="_blank"
+        class="fixed bottom-6 right-6 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-lg hover:scale-110 transition-transform duration-300 z-50">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
