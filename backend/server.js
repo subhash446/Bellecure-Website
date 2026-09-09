@@ -113,22 +113,142 @@ function normalizeApiKey(value) {
 }
 
 function buildFastReply(message = '') {
-  const text = String(message || '').trim().toLowerCase();
+  const originalText = String(message || '').trim();
+  const text = originalText.toLowerCase();
 
-  if (text.includes('size') || text.includes('bottle') || text.includes('ml') || text.includes('litre') || text.includes('liter')) {
+  // Detect Hindi written in Devanagari
+  const isHindiScript = /[\u0900-\u097F]/.test(originalText);
+
+  // Detect common Hinglish words
+  const hinglishWords = [
+    'hai', 'hain', 'kaise', 'kya', 'kr', 'kar', 'sakte', 'sakti',
+    'chahiye', 'banna', 'banna hai', 'chahiye', 'kitna', 'kitne',
+    'price', 'rate', 'paani', 'pani', 'bottle', 'distributor',
+    'ban', 'bano', 'mil', 'milega', 'milegi', 'apna', 'aapka',
+    'aapki', 'kahan', 'kab', 'kyu', 'kyon', 'wala', 'wali'
+  ];
+
+  const isHinglish = hinglishWords.some(word => text.includes(word));
+
+  // Hindi / Devanagari response
+  if (isHindiScript) {
+    if (
+      text.includes('साइज़') ||
+      text.includes('साइज') ||
+      text.includes('बोतल') ||
+      text.includes('एमएल') ||
+      text.includes('लीटर')
+    ) {
+      return 'Bellecure में 250 ml, 500 ml और 1 लीटर की बोतलें उपलब्ध हैं।';
+    }
+
+    if (
+      text.includes('शुद्ध') ||
+      text.includes('प्योर') ||
+      text.includes('सुरक्षित') ||
+      text.includes('गुणवत्ता') ||
+      text.includes('क्वालिटी')
+    ) {
+      return 'Bellecure स्वच्छ और सुरक्षित पेयजल के लिए RO, UV और UF जैसी multi-stage purification process का उपयोग करता है।';
+    }
+
+    if (
+      text.includes('डिस्ट्रीब्यूटर') ||
+      text.includes('डिस्ट्रीब्यूशन') ||
+      text.includes('पार्टनर') ||
+      text.includes('बिजनेस')
+    ) {
+      return 'आप Bellecure के distributor या business partner बनने के लिए वेबसाइट के Partner with us form को भर सकते हैं। हमारी टीम आपसे संपर्क करेगी।';
+    }
+
+    if (
+      text.includes('कीमत') ||
+      text.includes('दाम') ||
+      text.includes('रेट') ||
+      text.includes('प्राइस')
+    ) {
+      return 'Bellecure की latest pricing और bulk rates के लिए हमारी sales team से संपर्क करें।';
+    }
+
+    return 'Bellecure Darbhanga, Bihar का premium packaged drinking water brand है, जो purity, trust और quality पर focused है।';
+  }
+
+  // Hinglish response
+  if (isHinglish) {
+    if (
+      text.includes('size') ||
+      text.includes('bottle') ||
+      text.includes('ml') ||
+      text.includes('litre') ||
+      text.includes('liter')
+    ) {
+      return 'Bellecure mein 250 ml, 500 ml aur 1 litre bottle options available hain.';
+    }
+
+    if (
+      text.includes('purity') ||
+      text.includes('safe') ||
+      text.includes('quality') ||
+      text.includes('clean') ||
+      text.includes('shuddh')
+    ) {
+      return 'Bellecure clean aur safe drinking water ke liye RO, UV aur UF treatment wali multi-stage purification process follow karta hai.';
+    }
+
+    if (
+      text.includes('distributor') ||
+      text.includes('partner') ||
+      text.includes('business')
+    ) {
+      return 'Bilkul! Aap Bellecure ke distributor ya business partner ban sakte hain. Website par Partner with us form fill kijiye, hamari team aapse contact karegi.';
+    }
+
+    if (
+      text.includes('price') ||
+      text.includes('cost') ||
+      text.includes('rate') ||
+      text.includes('kitna')
+    ) {
+      return 'Bellecure ki latest pricing aur bulk rates ke liye hamari sales team se contact kijiye.';
+    }
+
+    return 'Bellecure Darbhanga, Bihar ka premium packaged drinking water brand hai, jo purity, trust aur quality par focused hai.';
+  }
+
+  // English response
+  if (
+    text.includes('size') ||
+    text.includes('bottle') ||
+    text.includes('ml') ||
+    text.includes('litre') ||
+    text.includes('liter')
+  ) {
     return 'Bellecure offers 250 ml, 500 ml, and 1 litre bottle options for daily use, travel, and family hydration.';
   }
 
-  if (text.includes('purity') || text.includes('safe') || text.includes('quality') || text.includes('clean')) {
+  if (
+    text.includes('purity') ||
+    text.includes('safe') ||
+    text.includes('quality') ||
+    text.includes('clean')
+  ) {
     return 'Bellecure follows a multi-stage purification process with RO, UV, and UF treatment to provide clean, safe, and refreshing drinking water.';
   }
 
-  if (text.includes('distributor') || text.includes('partner') || text.includes('business')) {
-    return 'You can become a Bellecure distributor or partner by contacting our sales team through the website form or by calling +91 8700905571.';
+  if (
+    text.includes('distributor') ||
+    text.includes('partner') ||
+    text.includes('business')
+  ) {
+    return 'You can become a Bellecure distributor or partner by filling out the Partner with us form on the website. Our team will contact you.';
   }
 
-  if (text.includes('price') || text.includes('cost') || text.includes('rate')) {
-    return 'Bellecure offers value-based pricing for households, retail stores, and distributors. Please contact our team for the latest bulk and partner rates.';
+  if (
+    text.includes('price') ||
+    text.includes('cost') ||
+    text.includes('rate')
+  ) {
+    return 'Bellecure offers value-based pricing for households, retail stores, and distributors. Please contact our sales team for the latest bulk and partner rates.';
   }
 
   return 'Bellecure is a premium packaged drinking water brand from Darbhanga, Bihar, focused on purity, trust, and quality for homes, offices, and business partners.';
@@ -369,7 +489,23 @@ app.post('/api/chat', async (req, res) => {
     try {
       const model = genAI.getGenerativeModel({ model: modelName });
       const generationPromise = model.generateContent([
-        `You are a helpful assistant for Bellecure Agro Food & Co., a premium packaged drinking water brand from Darbhanga, Bihar. Answer product and brand questions in a concise, friendly, and professional way. Do not invent facts. If unsure, say you are not certain. User question: ${cleanedMessage}`
+        `You are a helpful AI assistant for Bellecure Agro Food & Co., a premium packaged drinking water brand from Darbhanga, Bihar.
+
+Language rules:
+- Detect the language and style used by the user.
+- If the user writes in English, reply in English.
+- If the user writes in Hindi, reply in Hindi using Devanagari script.
+- If the user writes in Hinglish (Hindi written using English letters), reply naturally in Hinglish using English letters.
+- If the user mixes Hindi and English, reply in the same mixed style.
+- Never force English when the user is speaking Hindi or Hinglish.
+- Keep replies concise, friendly, professional, and easy to understand.
+
+Knowledge rules:
+- Answer only about Bellecure, its products, packaged drinking water, quality, distribution, partnership, and information available on the website.
+- Do not invent facts, prices, sizes, certifications, locations, or policies.
+- If you are unsure about something, clearly say that you are not certain and suggest contacting the Bellecure team.
+
+User question: ${cleanedMessage}`
       ]);
 
       const result = await runWithTimeout(generationPromise, 5000);
