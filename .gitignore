@@ -1,0 +1,19 @@
+# Ignore node modules if you ever add a build tool or package manager files
+node_modules/
+
+# Ignore environment variable files and local config files
+.env
+.env.*
+*.local
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore build output
+dist/
+build/
+
+# Ignore editor files
+.vscode/
+.idea/
