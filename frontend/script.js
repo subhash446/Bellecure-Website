@@ -1,8 +1,6 @@
-const API_BASE = window.BELLECURE_API_BASE || (
-    window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:3000'
-        : 'https://bellecure-website.onrender.com'
-);
+const API_BASE = window.BELLECURE_API_BASE || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : window.location.origin);
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Mobile Menu Toggle ---
