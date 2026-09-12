@@ -1,37 +1,133 @@
-# Bellecure
+<div align="center">
 
-Bellecure is a premium packaged drinking water brand website with a modern customer-facing landing page, product presentation, distributor inquiry form, AI-powered support assistant, and admin-ready backend APIs.
+# 💧 Bellecure — Premium Packaged Drinking Water Website
 
-This project is built to give Bellecure a professional online presence, improve customer trust, generate distributor leads, and support future business operations with a scalable web architecture.
+**Bellecure Agro Food & Co.**
 
-## Overview
+A production-ready, full-stack website for a premium packaged drinking water brand — featuring an AI-powered customer support assistant, a business inquiry system, and an admin dashboard.
 
-The application includes:
+[![Live Website](https://img.shields.io/badge/Live-bellecure.co.in-2ea44f?style=for-the-badge)](https://bellecure.co.in)
+[![Backend](https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge)](https://bellecure-website.onrender.com)
+[![License](https://img.shields.io/badge/License-Proprietary-lightgrey?style=for-the-badge)](#-license)
 
-- a premium public-facing homepage
-- product and quality showcase sections
-- distributor inquiry form with validation
-- AI assistant for product and brand questions
-- admin login support for internal access
-- MongoDB-backed storage for inquiry and chat data
-- email notification support for website inquiries
+[Live Website](https://bellecure.co.in) • [GitHub Repository](https://github.com/subhash446/Bellecure-Website) • [Report an Issue](https://github.com/subhash446/Bellecure-Website/issues)
 
-## Tech Stack
+</div>
 
+---
+
+## 📌 About the Project
+
+**Bellecure** is a full-stack business website built for **Bellecure Agro Food & Co.**, a packaged drinking water brand based in Darbhanga, Bihar.
+
+The platform gives the brand a professional digital presence and lets customers, retailers, and potential distributors interact with the business through product information, inquiry forms, WhatsApp communication, and an AI-powered customer-support assistant.
+
+The project includes a responsive customer-facing website, REST APIs, MongoDB-backed data storage, an admin login and dashboard, email notifications, WhatsApp integration, and Google Gemini AI integration.
+
+---
+
+## 🌐 Live Links
+
+| Environment | URL |
+|---|---|
+| 🖥️ Website (Frontend) | [https://bellecure.co.in](https://bellecure.co.in) |
+| ⚙️ API (Backend) | [https://bellecure-website.onrender.com](https://bellecure-website.onrender.com) |
+
+---
+
+## ✨ Features
+
+### 🛍️ Customer Website
+- Responsive, mobile-friendly design
+- Premium brand-focused landing page
+- Product showcase
+- Water quality and purification information
+- Business/distributor inquiry form with validation
+- WhatsApp contact integration
+- AI-powered customer-support assistant
+
+### 🤖 AI Customer Support
+- Google Gemini API integration
+- Handles product and brand-related queries
+- Supports **English**, **Hindi**, and **Hinglish**
+- Automatic language/style-aware responses
+- Predefined fallback responses when the Gemini API is unavailable or quota-limited
+
+### 🔑 Admin Dashboard
+- Secure admin login (email + password authentication)
+- Protected admin routes
+- Distributor inquiry management
+- Customer interaction visibility
+- Backend API integration
+
+### 📩 Business Inquiry System
+- Distributor and partnership inquiry form
+- Client-side and server-side validation
+- MongoDB storage for all inquiries
+- Email notifications via Resend API
+- WhatsApp communication option
+- Centralized error handling and API validation
+
+### 🗄️ Database
+- MongoDB Atlas integration
+- Mongoose-based data models
+- Persistent inquiry storage
+- Chat interaction logging
+
+---
+
+## 🛠️ Tech Stack
+
+<table>
+<tr>
+<td valign="top" width="25%">
+
+**Frontend**
 - HTML5
-- CSS / Tailwind CSS
+- CSS3
 - JavaScript
+- Tailwind CSS
+
+</td>
+<td valign="top" width="25%">
+
+**Backend**
 - Node.js
 - Express.js
-- MongoDB + Mongoose
-- Google Generative AI (Gemini)
-- Nodemailer
+- REST APIs
+- CORS
 - dotenv
 
-## Project Structure
+</td>
+<td valign="top" width="25%">
+
+**Database & AI**
+- MongoDB / Atlas
+- Mongoose
+- Google Gemini API
+
+</td>
+<td valign="top" width="25%">
+
+**Tools & Deployment**
+- Git & GitHub
+- Postman
+- Netlify (Frontend)
+- Render (Backend)
+- Resend API
+- WhatsApp Integration
+
+</td>
+</tr>
+</table>
+
+---
+
+## 📁 Project Structure
 
 ```text
-Bellecure2/
+Bellecure-Website/
+│
 ├── frontend/
 │   ├── index.html
 │   ├── admin.html
@@ -39,6 +135,7 @@ Bellecure2/
 │   ├── admin.js
 │   ├── images/
 │   └── logo.jpeg
+│
 ├── backend/
 │   ├── server.js
 │   ├── config/
@@ -46,118 +143,208 @@ Bellecure2/
 │   ├── models/
 │   │   ├── Inquiry.js
 │   │   └── ChatLog.js
-│   ├── tests/
-│   │   └── server.test.js
-│   └── utils/
-├── .env
+│   └── tests/
+│       └── server.test.js
+│
+├── docs/
+│   ├── deployment.md
+│   ├── project-overview.md
+│   └── setup.md
+│
 ├── .env.example
 ├── .gitignore
 ├── package.json
-├── README.md
-└── docs/
+├── package-lock.json
+└── README.md
 ```
 
-## Features
+---
 
-- Responsive landing page for a premium brand
-- Product-focused hero section and sales messaging
-- Distributor inquiry form with mobile validation and state/district handling
-- AI assistant with fallback responses when the API is unavailable
-- MongoDB integration for storing inquiries and chat logs
-- Admin login endpoint using email and password
-- Email sending for new business inquiries
-- Health and database status endpoints
+## ⚙️ Local Setup
 
-## Local Setup
+Follow the steps below to run the project locally.
 
-1. Clone the repository:
+### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd Bellecure2
+git clone https://github.com/subhash446/Bellecure-Website.git
+cd Bellecure-Website
 ```
 
-2. Install dependencies:
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-3. Create your environment file:
+### 3. Configure Environment Variables
 
-```bash
-copy .env.example .env
-```
-
-4. Update values in `.env` with your local configuration.
-
-5. Start the application:
-
-```bash
-npm start
-```
-
-6. Open the website in your browser:
-
-```text
-http://localhost:3000
-```
-
-## Environment Variables
-
-Create a `.env` file based on `.env.example` and fill in the values:
+Create a `.env` file in the project root and add the required configuration:
 
 ```env
 PORT=3000
-GEMINI_API_KEY=your_google_gemini_api_key_here
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_gmail_app_password
-EMAIL_TO=contact@bellecure.in
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/bellecure
-ADMIN_EMAIL=admin@bellecure.in
-ADMIN_PASSWORD=your_secure_admin_password
+
+MONGODB_URI=your_mongodb_connection_string
+
+GEMINI_API_KEY=your_gemini_api_key
+
+RESEND_API_KEY=your_resend_api_key
+EMAIL_FROM=your_verified_sender_email
+EMAIL_TO=your_recipient_email
+
+ADMIN_EMAIL=your_admin_email
+ADMIN_PASSWORD=your_admin_password
+
+FRONTEND_URL=http://localhost:3000
 ```
 
-## Available Scripts
+> ⚠️ **Important:** Never commit `.env` files, API keys, passwords, or other sensitive credentials to GitHub.
+
+### 4. Start the Application
 
 ```bash
 npm start
+```
+
+The application will be available at:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 🧪 Testing
+
+The project includes backend tests for verifying application functionality.
+
+```bash
 npm test
 ```
 
-## Deployment Overview
+API endpoints can also be tested using **Postman**.
 
-This project is designed for a clean production setup:
+---
 
-- frontend can be hosted on Netlify
-- backend can be hosted on Render or Railway
-- MongoDB can be hosted on MongoDB Atlas
-- environment variables should be managed in the hosting platform, not committed to the repository
+## 🔌 API Endpoints
 
-## Notes
+The backend exposes REST APIs for website functionality, AI support, business inquiries, and administration.
 
-- If `GEMINI_API_KEY` is missing or invalid, the assistant automatically falls back to a predefined brand-safe response.
-- The contact form submits inquiry details and sends an email notification.
-- MongoDB is optional during early local development but recommended for production use.
-- Admin access is protected using email and password validation.
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/` | Serves the website |
+| `GET` | `/api/health` | Backend health check |
+| `GET` | `/api/db-status` | MongoDB connection status |
+| `POST` | `/api/chat` | AI customer-support assistant |
+| `POST` | `/api/contact` | Submit a distributor/business inquiry |
+| `POST` | `/api/admin/login` | Admin authentication |
 
-## Production Considerations
+---
 
-- Keep all credentials in environment variables
-- Never commit `.env` files to GitHub
-- Use MongoDB Atlas for secure database access in production
-- Use HTTPS in deployed environments
-- Configure proper CORS rules for frontend and backend domains
+## 🔐 Security & Reliability
 
-## Future Improvements
+The application follows several security and reliability practices:
 
-- advanced admin dashboard with analytics
-- lead management and export features
-- product catalog admin panel
-- better SEO and metadata optimization
-- deployment automation and CI/CD setup
-- enhanced AI answer personalization and brand messaging
+- Sensitive credentials stored using environment variables
+- `.env` excluded from version control
+- CORS configuration
+- Client-side and server-side request validation
+- HTML escaping for user-submitted content
+- Protected admin access
+- Centralized API error handling
+- AI fallback handling for API downtime/quota limits
+- Database connection monitoring
+- HTTPS enforced in production
 
-## License
+---
 
-This project is intended for Bellecure brand usage and internal business deployment. Update licensing terms as needed before public distribution.
+## 🚀 Production Architecture
+
+```text
+                         Customer
+                            │
+                            ▼
+                  ┌──────────────────┐
+                  │     Netlify      │
+                  │    Frontend      │
+                  └────────┬─────────┘
+                           │
+                        REST API
+                           │
+                           ▼
+                  ┌──────────────────┐
+                  │      Render      │
+                  │  Node + Express  │
+                  └───────┬───┬──────┘
+                          │   │
+              ┌───────────┘   └────────────┐
+              ▼                            ▼
+     ┌─────────────────┐          ┌──────────────────┐
+     │  MongoDB Atlas  │          │  Google Gemini    │
+     │ Inquiry + Chats │          │  AI Assistant     │
+     └─────────────────┘          └──────────────────┘
+                          │
+                          ▼
+                  ┌─────────────────┐
+                  │   Resend API    │
+                  │ Email Delivery  │
+                  └─────────────────┘
+```
+
+---
+
+## 💡 Key Learning & Implementation Areas
+
+This project provided hands-on experience with:
+
+- Full-stack web development
+- Frontend and backend integration
+- REST API design and development
+- Node.js and Express.js
+- MongoDB and Mongoose
+- Admin authentication
+- Third-party API integration (Gemini, Resend, WhatsApp)
+- API testing with Postman
+- Production debugging
+- CORS configuration
+- Environment variable management
+- Cloud deployment (Netlify, Render, Atlas)
+- Handling third-party API failures and quota limitations
+
+---
+
+## 🔮 Future Improvements
+
+- [ ] Advanced admin analytics
+- [ ] Inquiry search and filtering
+- [ ] Inquiry export functionality
+- [ ] Product management through admin dashboard
+- [ ] Role-based admin access
+- [ ] Customer inquiry status tracking
+- [ ] Improved SEO and metadata
+- [ ] CI/CD automation
+- [ ] Enhanced AI knowledge base
+- [ ] Business analytics and reporting
+
+---
+
+## 👨‍💻 Developer
+
+**Subhash Kumar Yadav**
+B.Tech — Information Technology
+
+[![GitHub](https://img.shields.io/badge/GitHub-subhash446-181717?style=flat-square&logo=github)](https://github.com/subhash446)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-subhash--kumar--yadav-0A66C2?style=flat-square&logo=linkedin)](https://linkedin.com/in/subhash-kumar-yadav)
+
+---
+
+## 📄 License
+
+This project was developed for **Bellecure Agro Food & Co.**
+The website and application are intended for Bellecure's business use and deployment. All rights reserved.
+
+<div align="center">
+
+Made with 💧 for **Bellecure Agro Food & Co.**
+
+</div>
