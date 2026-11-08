@@ -4,6 +4,7 @@ node_modules/
 # Ignore environment variable files and local config files
 .env
 .env.*
+!.env.example
 *.local
 
 # Ignore OS files
@@ -17,3 +18,4 @@ build/
 # Ignore editor files
 .vscode/
 .idea/
+.agents/

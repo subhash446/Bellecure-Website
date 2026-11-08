@@ -331,11 +331,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        let chatSessionId = sessionStorage.getItem('bellecure_chat_session_id');
+        if (!chatSessionId) {
+            chatSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
+            sessionStorage.setItem('bellecure_chat_session_id', chatSessionId);
+        }
+
+        const getChatHistory = () => {
+            try {
+                const stored = sessionStorage.getItem('bellecure_chat_history');
+                return stored ? JSON.parse(stored) : [];
+            } catch {
+                return [];
+            }
+        };
+
+        const appendChatHistory = (role, content) => {
+            try {
+                const history = getChatHistory();
+                history.push({ role, content });
+                sessionStorage.setItem('bellecure_chat_history', JSON.stringify(history.slice(-10)));
+            } catch {}
+        };
+
         const sendAssistantMessage = async () => {
             const message = assistantInput.value.trim();
             if (!message) return;
 
             addAssistantMessage(message, 'user');
+            appendChatHistory('user', message);
             assistantInput.value = '';
             assistantSend.disabled = true;
             assistantSend.classList.add('opacity-70');
@@ -343,17 +367,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const thinkingIndicator = addThinkingIndicator();
 
             try {
+                const history = getChatHistory().slice(-8);
                 const response = await fetch(`${API_BASE}/api/chat`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message })
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-session-id': chatSessionId
+                    },
+                    body: JSON.stringify({ message, history })
                 });
 
                 const data = await response.json();
                 const reply = data.reply || 'Sorry, I could not respond right now.';
                 removeThinkingIndicator();
                 addAssistantMessage(reply, 'bot');
+                appendChatHistory('assistant', reply);
             } catch (error) {
+                console.error('Bellecure Assistant error:', error);
                 removeThinkingIndicator();
                 addAssistantMessage('Sorry, the assistant is unavailable right now. Please try again later.', 'bot');
             } finally {
@@ -420,7 +450,13 @@ document.addEventListener('DOMContentLoaded', () => {
         'Sikkim': ['East Sikkim', 'North Sikkim', 'South Sikkim', 'West Sikkim'],
         'Goa': ['North Goa', 'South Goa'],
         'Himachal Pradesh': ['Bilaspur', 'Chamba', 'Hamirpur', 'Kangra', 'Kinnaur', 'Kullu', 'Lahaul and Spiti', 'Mandi', 'Shimla', 'Sirmaur', 'Solan', 'Una'],
-        'Jharkhand': ['Bokaro', 'Chatra', 'Deoghar', 'Dhanbad', 'Dumka', 'East Singhbhum', 'Garhwa', 'Giridih', 'Godda', 'Gumla', 'Hazaribagh', 'Jamtara', 'Khunti', 'Koderma', 'Latehar', 'Lohardaga', 'Pakur', 'Palamu', 'Ramgarh', 'Ranchi', 'Sahibganj', 'Seraikela Kharsawan', 'Simdega', 'West Singhbhum']
+        'Jharkhand': ['Bokaro', 'Chatra', 'Deoghar', 'Dhanbad', 'Dumka', 'East Singhbhum', 'Garhwa', 'Giridih', 'Godda', 'Gumla', 'Hazaribagh', 'Jamtara', 'Khunti', 'Koderma', 'Latehar', 'Lohardaga', 'Pakur', 'Palamu', 'Ramgarh', 'Ranchi', 'Sahibganj', 'Seraikela Kharsawan', 'Simdega', 'West Singhbhum'],
+        'Andaman and Nicobar Islands': ['Nicobar', 'North and Middle Andaman', 'South Andaman'],
+        'Chandigarh': ['Chandigarh'],
+        'Dadra and Nagar Haveli and Daman and Diu': ['Dadra and Nagar Haveli', 'Daman', 'Diu'],
+        'Ladakh': ['Kargil', 'Leh'],
+        'Lakshadweep': ['Lakshadweep'],
+        'Puducherry': ['Karaikal', 'Mahe', 'Puducherry', 'Yanam']
     };
 
     const updateDistrictOptions = () => {
@@ -611,6 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showModal();
                 distributorForm.reset();
             } catch (error) {
+                console.error('Distributor form error:', error);
                 formMessage.textContent = error.message || 'Oops! Something went wrong. Please try calling us.';
                 formMessage.className = 'p-3 rounded-md text-sm font-medium text-center bg-red-100 text-red-800 mt-4';
                 formMessage.classList.remove('hidden');

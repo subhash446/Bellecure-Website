@@ -59,8 +59,15 @@ test('builds a fast product fallback reply for common Bellecure questions', () =
 });
 
 test('contact endpoint returns a clear message when email service is not configured', async () => {
+  const originalResendKey = process.env.RESEND_API_KEY;
+  const originalEmailFrom = process.env.EMAIL_FROM;
+  const originalEmailTo = process.env.EMAIL_TO;
   const originalUser = process.env.EMAIL_USER;
   const originalPass = process.env.EMAIL_PASS;
+
+  process.env.RESEND_API_KEY = '';
+  process.env.EMAIL_FROM = '';
+  process.env.EMAIL_TO = '';
   process.env.EMAIL_USER = '';
   process.env.EMAIL_PASS = '';
 
@@ -89,22 +96,46 @@ test('contact endpoint returns a clear message when email service is not configu
     const body = await response.json();
     assert.equal(body.success, false);
     assert.match(body.message, /email.*configured|configured/i);
+    assert.ok(Array.isArray(body.missing));
   } finally {
     server.close();
 
-    if (originalUser === undefined) {
-      delete process.env.EMAIL_USER;
-    } else {
-      process.env.EMAIL_USER = originalUser;
-    }
-
-    if (originalPass === undefined) {
-      delete process.env.EMAIL_PASS;
-    } else {
-      process.env.EMAIL_PASS = originalPass;
-    }
+    if (originalResendKey === undefined) delete process.env.RESEND_API_KEY; else process.env.RESEND_API_KEY = originalResendKey;
+    if (originalEmailFrom === undefined) delete process.env.EMAIL_FROM; else process.env.EMAIL_FROM = originalEmailFrom;
+    if (originalEmailTo === undefined) delete process.env.EMAIL_TO; else process.env.EMAIL_TO = originalEmailTo;
+    if (originalUser === undefined) delete process.env.EMAIL_USER; else process.env.EMAIL_USER = originalUser;
+    if (originalPass === undefined) delete process.env.EMAIL_PASS; else process.env.EMAIL_PASS = originalPass;
 
     delete require.cache[require.resolve('../server')];
+  }
+});
+
+test('getEmailConfig dynamically reflects environment variables without exposure', () => {
+  const { getEmailConfig } = require('../server');
+  const originalKey = process.env.RESEND_API_KEY;
+  const originalFrom = process.env.EMAIL_FROM;
+  const originalTo = process.env.EMAIL_TO;
+
+  try {
+    process.env.RESEND_API_KEY = ' re_test_key_123 ';
+    process.env.EMAIL_FROM = ' test@bellecure.co.in ';
+    process.env.EMAIL_TO = ' sales@bellecure.co.in ';
+
+    const config = getEmailConfig();
+    assert.equal(config.apiKey, 're_test_key_123');
+    assert.equal(config.from, 'test@bellecure.co.in');
+    assert.equal(config.to, 'sales@bellecure.co.in');
+    assert.equal(config.isConfigured, true);
+    assert.equal(config.missing.length, 0);
+
+    process.env.RESEND_API_KEY = '';
+    const unconfigured = getEmailConfig();
+    assert.equal(unconfigured.isConfigured, false);
+    assert.ok(unconfigured.missing.includes('RESEND_API_KEY'));
+  } finally {
+    if (originalKey === undefined) delete process.env.RESEND_API_KEY; else process.env.RESEND_API_KEY = originalKey;
+    if (originalFrom === undefined) delete process.env.EMAIL_FROM; else process.env.EMAIL_FROM = originalFrom;
+    if (originalTo === undefined) delete process.env.EMAIL_TO; else process.env.EMAIL_TO = originalTo;
   }
 });
 

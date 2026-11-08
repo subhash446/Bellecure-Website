@@ -7,6 +7,16 @@ const apiBase = window.BELLECURE_API_BASE || (
     : 'https://bellecure-website.onrender.com'
 );
 
+function escapeHtml(value = '') {
+  if (value === null || value === undefined) return '';
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 function renderLogin() {
   app.innerHTML = `
     <div class="min-h-screen flex items-center justify-center px-4">
@@ -79,6 +89,8 @@ function renderLogin() {
       }
 
       localStorage.setItem('bellecure-admin-email', email);
+      localStorage.setItem('bellecure-admin-key', password);
+      renderDashboard();
     } catch (error) {
       message.textContent = 'Unable to connect to the server.';
       message.classList.remove('hidden');
@@ -157,10 +169,10 @@ async function renderDashboard() {
                 <tbody>
                   ${inquiries.length ? inquiries.map((item) => `
                     <tr class="border-t border-slate-200">
-                      <td class="px-4 py-3 font-medium">${item.from_name || '-'}</td>
-                      <td class="px-4 py-3">${item.phone_number || '-'}</td>
-                      <td class="px-4 py-3">${item.city || '-'} / ${item.state || '-'}</td>
-                      <td class="px-4 py-3">${item.business_type || '-'}</td>
+                      <td class="px-4 py-3 font-medium">${escapeHtml(item.from_name) || '-'}</td>
+                      <td class="px-4 py-3">${escapeHtml(item.phone_number) || '-'}</td>
+                      <td class="px-4 py-3">${escapeHtml(item.city) || '-'} / ${escapeHtml(item.state) || '-'}</td>
+                      <td class="px-4 py-3">${escapeHtml(item.business_type) || '-'}</td>
                     </tr>
                   `).join('') : `
                     <tr>
@@ -181,10 +193,10 @@ async function renderDashboard() {
                 ${chatLogs.length ? chatLogs.map((log) => `
                   <div class="border border-slate-200 rounded-xl p-3 ${log.sender === 'user' ? 'bg-red-50' : 'bg-slate-50'}">
                     <div class="flex items-center justify-between mb-2">
-                      <span class="text-xs font-bold uppercase tracking-[0.12em] ${log.sender === 'user' ? 'text-brand-red' : 'text-slate-600'}">${log.sender}</span>
+                      <span class="text-xs font-bold uppercase tracking-[0.12em] ${log.sender === 'user' ? 'text-brand-red' : 'text-slate-600'}">${escapeHtml(log.sender)}</span>
                       <span class="text-[11px] text-slate-500">${new Date(log.createdAt || Date.now()).toLocaleString()}</span>
                     </div>
-                    <p class="text-sm text-slate-700 whitespace-pre-wrap">${(log.message || '').replace(/</g, '&lt;')}</p>
+                    <p class="text-sm text-slate-700 whitespace-pre-wrap">${escapeHtml(log.message)}</p>
                   </div>
                 `).join('') : `
                   <div class="border border-dashed border-slate-300 rounded-xl p-5 text-center text-slate-500">No chat logs saved yet.</div>
@@ -199,15 +211,17 @@ async function renderDashboard() {
     const logoutBtn = document.getElementById('logoutBtn');
     logoutBtn.addEventListener('click', () => {
       localStorage.removeItem('bellecure-admin-key');
+      localStorage.removeItem('bellecure-admin-email');
       renderLogin();
     });
   } catch (error) {
     localStorage.removeItem('bellecure-admin-key');
+    localStorage.removeItem('bellecure-admin-email');
     app.innerHTML = `
       <div class="min-h-screen flex items-center justify-center px-4">
         <div class="bg-white border border-red-100 rounded-2xl p-6 max-w-lg text-center shadow-lg">
           <h2 class="text-2xl font-bold text-slate-900 mb-3">Session expired</h2>
-          <p class="text-slate-600 mb-5">${error.message || 'Access denied.'}</p>
+          <p class="text-slate-600 mb-5">${escapeHtml(error.message) || 'Access denied.'}</p>
           <button id="retryLogin" class="bg-brand-red text-white px-5 py-3 rounded-lg font-semibold hover:bg-red-700 transition">
             Login again
           </button>
