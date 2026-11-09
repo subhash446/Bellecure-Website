@@ -333,6 +333,36 @@
                 transition: none;
             }
         }
+
+        /* ─── Hero Android Chrome Desktop Site & tall portrait viewports fix ─── */
+        @media screen and (min-width: 900px) and (orientation: portrait),
+               screen and (min-width: 900px) and (max-aspect-ratio: 3/4) {
+            #home {
+                min-height: auto !important;
+                align-items: flex-start !important;
+            }
+            #home .relative.z-10 > div {
+                flex-direction: row !important;
+                gap: 0 !important;
+                padding-top: 2rem !important;
+                padding-bottom: 3.5rem !important;
+            }
+            #home .relative.z-10 > div > div:first-child {
+                width: 55% !important;
+                padding-right: 2.5rem !important;
+            }
+            #home .relative.z-10 > div > div:last-child {
+                width: 45% !important;
+                display: flex !important;
+                justify-content: flex-end !important;
+            }
+            #home .relative.z-10 > div > div:last-child img {
+                height: 520px !important;
+            }
+            #home .absolute.inset-y-0.right-0 {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 
